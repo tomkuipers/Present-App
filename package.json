@@ -1,0 +1,23 @@
+{
+  "name": "present",
+  "subdomain": "present",
+  "scripts": {
+    "start": "app.js"
+  },
+  "version": "0.0.1-4",
+  "dependencies": {
+    "express": "2.5.x",
+    "connect": "2.2.x",
+    "http": "*",
+    "socket.io": "0.9.x",
+    "now": "0.8.x",
+    "jqtpl": "1.1.x",
+    "passport": "0.1.x",
+    "passport-google-oauth": "0.1.x",
+    "passport-google": "0.2.x",
+    "manifesto": "0.0.x"
+  },
+  "engines": {
+    "node": "0.8.x"
+  }
+}
