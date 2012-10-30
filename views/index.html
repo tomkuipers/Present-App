@@ -1,0 +1,139 @@
+<!DOCTYPE html> 
+<html manifest="manifest.appcache"> 
+<head>
+        <meta charset="utf-8"/> 
+	<title>Present!</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+        <link rel="stylesheet" href="http://jquerymobile.com/demos/1.2.0/docs/_assets/css/jqm-docs.css" />
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script src="/javascripts/custom.js"></script>
+        <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+        <script src="http://jquerymobile.com/demos/1.2.0/docs/_assets/js/jqm-docs.js"></script>
+	<script src="/javascripts/hide-address-bar.js"></script>
+        <script src="/nowjs/now.js"></script>
+	<script>
+
+	$(document).ready(function(){
+		now.receiveMessage = function(name, message) {
+			$('#messages').prepend('<li>' + name + ': '  + message + '</li>');
+			$('#messages').listview("refresh");
+		}
+  
+		$("#sendButton").click(function() {
+			now.distributeMessage($("#messageText").val());
+			$("#messageText").val("");
+		});
+
+		now.name = prompt("What's your name?", "");
+
+	});
+
+	</script>
+</head> 
+<body> 
+
+<div data-role="page" data-theme="c" id="splash">
+
+	<div data-role="fieldcontain">
+	<label for="role">Present Appp</label>
+	<select name="role" id="role" data-role="slider" data-theme="a">
+		<option value="presenter">I will present</option>
+		<option value="present">I am present</option>
+	</select>
+        <a href="/home/index?login=true" data-ajax="false" data-role="button" data-theme="a">Log in</a> 
+</div>
+
+
+</div><!-- /page -->
+
+
+<div data-role="page" data-theme="c" id="home">
+	<header data-role="header" data-position="fixed" data-theme="a">
+		<h1>Present!</h1>
+		<div data-role="navbar">
+		<ul>
+			<li><a href="#" class="ui-btn-active">Home</a></li>
+			<li><a href="#questions">Questions</a></li>
+			<li><a href="#about">About</a></li>
+		</ul>
+		</div><!-- /navbar -->
+	</header><!-- /header -->
+
+	<section data-role="content">
+		<p>n non nisi vel lectus tristique lobortis vitae nec velit? Sed libero mi, pharetra ut posuere sed, aliquet vitae nibh. Mauris accumsan, nisl vel pretium facilisis, nisi lacus molestie dui, in viverra dui dolor a sem. Fusce pellentesque semper erat vitae rutrum. Donec sit amet blandit lorem? Sed nec est eget dui molestie pulvinar. Aliquam iaculis turpis quam, at gravida mi. Nam in mauris diam! Nullam eget scelerisque magna. Maecenas vel neque dolor. Pellentesque sodales fringilla ultrices.
+</p>	
+	</section><!-- /content -->
+
+	<footer data-role="footer" class="footer-docs" data-theme="c">
+		<p class="jqm-version"></p>
+		<p>&copy; 2012 jQuery Foundation and other contributors</p>
+	</footer><!-- /footer -->
+</div><!-- /page -->
+
+
+<div data-role="page" data-theme="c" id="questions">
+	<header data-role="header" data-position="fixed" data-theme="a">
+		<h1>Present!</h1>
+                <div data-role="navbar">
+		<ul>
+			<li><a href="#home">Home</a></li>
+			<li><a href="#" class="ui-btn-active">Questions</a></li>
+			<li><a href="#about">About</a></li>
+		</ul>
+	        </div><!-- /navbar -->
+	</header><!-- /header -->
+
+
+	<section data-role="content">	
+		<p>Page content goes here.</p>
+
+		<ul id="questionList" data-inset="true" data-role="listview" data-split-icon="check">
+                	<li data-icon="check"><a>Is there a God?<span class="ui-li-count">21</span></a></li>
+                        <li data-icon="check"><a>Please explain Murphy's Law.<span class="ui-li-count">5</span></a></li>
+                        <li data-icon="check"><a>Do we get a test about this?<span class="ui-li-count">1</span></a></li>
+                	<li><a>With data-plit-icon!<span class="ui-li-count">3</span></a><a href="#like" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+		</ul>		
+	</section><!-- /content -->
+
+        <footer data-role="footer" class="footer-docs" data-theme="c">
+		<p class="jqm-version"></p>
+		<p>&copy; 2012 jQuery Foundation and other contributors</p>
+	</footer>
+	<!-- /footer -->
+</div><!-- /page -->
+
+<div data-role="page" data-theme="c" id="about">
+	<header data-role="header" data-position="fixed" data-theme="a">
+		<h1>Present!</h1>
+		<div data-role="navbar">
+		<ul>
+			<li><a href="#home">Home</a></li>
+			<li><a href="#questions">Questions</a></li>
+			<li><a href="#" class="ui-btn-active">About</a></li>
+		</ul>
+		</div>
+	</header>
+
+	<section data-role="content">
+	
+	<div>  
+		<label for="messageText">Your message</label>
+		<input type="text" id="messageText"/>
+		<button id="sendButton" >Send</button>  
+	</div>
+	<div class="listDiv">
+		<ul id="messages" data-role="listview"></ul>
+	</div>
+
+	</section>
+	<footer data-role="footer" data-position="fixed" class="footer-docs" data-theme="c">
+                <p class="jqm-version"></p>
+                <p>&copy; 2012 jQuery Foundation and other contributors</p>
+	</footer>
+	<!-- /footer -->
+</div><!-- /page -->
+
+</body>
+</html>
+
