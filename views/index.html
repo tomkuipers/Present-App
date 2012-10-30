@@ -1,5 +1,6 @@
 <!DOCTYPE html> 
-<html manifest="manifest.appcache"> 
+<html>
+<!-- <html manifest="manifest.appcache"> --> 
 <head>
         <meta charset="utf-8"/> 
 	<title>Present!</title> 
@@ -34,7 +35,7 @@
 <body> 
 
 <div data-role="page" data-theme="c" id="splash">
-
+	<section data-role="content">
 	<div data-role="fieldcontain">
 	<label for="role">Present Appp</label>
 	<select name="role" id="role" data-role="slider" data-theme="a">
@@ -42,7 +43,8 @@
 		<option value="present">I am present</option>
 	</select>
         <a href="/home/index?login=true" data-ajax="false" data-role="button" data-theme="a">Log in</a> 
-</div>
+	</div>
+	</section>
 
 
 </div><!-- /page -->
