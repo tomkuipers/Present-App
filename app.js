@@ -41,7 +41,7 @@ app.configure(function(){
     app.use(express.cookieParser());
     app.use(express.methodOverride());
     app.use(express.bodyParser());
-    app.use(express.favicon(__dirname + 'public/images/favicon.ico'));
+    app.use(express.favicon(__dirname + '/public/images/favicon.ico'));
     app.use(express.static(__dirname + '/public'));
     app.use(express.session({ secret: 'keyboard cat' }));
     // Initialize Passport! Also use passport.session() middleware, to support
