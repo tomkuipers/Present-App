@@ -1,0 +1,230 @@
+<!DOCTYPE html> 
+<!-- <html manifest="manifest.appcache"> --> 
+<html>
+<head>
+        <meta charset="utf-8"/> 
+	<title>Present!</title> 
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
+        <link rel="stylesheet" href="/stylesheets/custom.css" />
+	<script src="/javascripts/modernizr-2.6.1.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script>var presentationId = "${presentation._id}";</script>
+	<script src="/javascripts/custom.js"></script>
+	<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+	<script src="/javascripts/hide-address-bar.js"></script>
+	<script src="/javascripts/jquery.qrcode.js"></script>
+	<script src="/javascripts/qrcode.js"></script>
+        <script src="/nowjs/now.js"></script>
+</head> 
+<body> 
+
+
+<div data-role="page" data-theme="c" id="pageQuestion">
+        <header data-role="header" data-position="fixed" data-theme="a">
+                <h1>Present!</h1>
+                <div data-role="navbar">
+                <ul>
+                        <li><a href="#pageListQuestions">Questions</a></li>
+			<li><a href="#pageListFavorites">Most wanted</a></li>
+			<li><a href="#pageAbout">About</a></li>
+                </ul>
+                </div>
+        </header>
+
+        <section data-role="content">
+        <div>
+                <label for="messageText">Your question for <strong>${presentation.title}</strong></label>
+                <input type="text" id="messageText" placeholder="Enter your question"/>
+                <button id="sendButton" data-role="button" data-theme="a" >Send</button>
+        </div>
+        <div class="listDiv">
+                <ul data-role="listview" id="messages" data-inset="true"></ul>
+        </div>
+
+        </section>
+</div><!-- /page -->
+
+<div data-role="page" data-theme="c" id="pageListQuestions">
+        <header data-role="header" data-position="fixed" data-theme="a">
+                <h1>Present!</h1>
+		<a href="/${presentation._id}/" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+                <div data-role="navbar">
+                <ul>
+                        <li><a href="#pageListQuestions" class="ui-btn-active">Questions</a></li>
+                        <li><a href="#pageListFavorites">Most wanted</a></li>
+			<li><a href="#pageAbout">About</a></li>
+                </ul>
+                </div><!-- /navbar -->
+        </header><!-- /header -->
+
+        <section data-role="content">
+		<ul data-role="listview" id="questions" data-filter="true" data-inset="true"></ul>
+        </section><!-- /content -->
+</div><!-- /page -->
+
+<div data-role="page" data-theme="c" id="pageListFavorites">
+	<header data-role="header" data-position="fixed" data-theme="a">
+		<h1>Present!</h1>
+		<a href="/${presentation._id}/" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+		<div data-role="navbar">
+		<ul>
+                        <li><a href="#pageListQuestions">Questions</a></li>
+                        <li><a href="#pageListFavorites" class="ui-btn-active">Most wanted</a></li>
+                        <li><a href="#pageAbout">About</a></li>
+                </ul>
+		</div><!-- navbar -->
+	</header><!-- /header -->
+
+	<section data-role="content">
+		<ul data-role="listview" id="favorites" data-filter="true" data-inset="true"></ul>
+	</section>
+</div><!-- /page -->
+
+<div data-role="page" data-theme="c" id="pageAbout">
+        <header data-role="header" data-position="fixed" data-theme="a">
+                <h1>Present!</h1>
+		<a href="/${presentation._id}/" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+                <div data-role="navbar">
+                <ul>
+			<li><a href="#pageListQuestions">Questions</a></li>
+                        <li><a href="#pageListFavorites">Most wanted</a></li>
+                        <li><a href="#pageAbout" class="ui-btn-active">About</a></li>
+                </ul>
+                </div>
+        </header>
+
+        <section data-role="content">
+		<p></p>
+        </section>
+</div><!-- /page -->
+
+<div data-role="page" data-theme="c" id="pAddPresentation">
+	<script>
+
+	 $(document).bind('pageinit', function() {
+
+		var lat, lon, timeoutVal = 10*1000*1000;
+		navigator.geolocation.getCurrentPosition(function(pos) {
+                                lat = pos.coords.latitude;
+                                lon = pos.coords.longitude;
+                        }, function() {
+                                lat, lon  = 0;
+                        }, { enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0});
+
+	$("#addPresentationBtn").click(function() {
+                        var title = $("#pTitle").val();
+                        $.post("/api/presentations", {
+                                "title": title,
+                                "lat": lat,
+                                "lon": lon
+                        }, function(data) {
+				$("#qrcode").before("<p>Presentation <strong>" + data.title + "</strong> created.</p>").qrcode({text: "http://" + data.url});
+                                var gotoBtn = '<a href="http://' + data.url + '" data-ajax="false" data-role="button" data-theme="a" id="launchBtn" >Start presentation</a>';
+				$("#pAddPresentation div.message").append("<a href='" + data.url + "' data-ajax='false'>" + data.url +  "</a><br/>" + gotoBtn).trigger("create");
+                                $("#pAddPresentation div.inputfields").toggle();
+
+                        });
+
+                });	
+});
+	</script>
+
+	<header data-role="header" data-position="fixed" data-theme="a">
+		<h1>Present!</h1>
+	</header>
+	<section data-role="content">
+		<div data-role="fieldcontain" class="containing-element">
+		<div class="inputfields">		
+                <input type="text" id="pTitle" placeholder="Enter presentation title" />
+                <button id="addPresentationBtn">Add</button>
+        	</div>
+        	<div class="message center">
+		    <div id="qrcode"></div> 
+                </div>
+		</div>
+	</section>
+</div><!-- /page -->
+
+
+<div data-role="page" data-theme="c" id="splash">
+	<section data-role="content">
+	<div data-role="fieldcontain" class="containing-element">
+	<label for="role">Present Appp</label>
+	<select name="role" id="role" data-role="slider" data-theme="a">
+		<option value="presenter">I will present</option>
+		<option value="present">I am present</option>
+	</select>
+
+        <div data-role="fieldcontain"> 
+	    <fieldset data-role="controlgroup" data-type="horizontal">
+	        <input type="radio" name="radio-view-a" id="radio-view-a-a" value="list"/> 
+		<label for="radio-view-a-a" data-form="ui-btn-up-a">I will present</label> 
+		<input type="radio" name="radio-view-a" id="radio-view-b-a" value="grid" checked="checked"/> 
+		<label for="radio-view-b-a" data-form="ui-btn-up-a">I am present</label> 
+	    </fieldset> 
+	</div>
+
+        <a href="/auth/google" data-ajax="false" data-role="button" data-theme="a">Sign in</a> 
+	</div>
+	</section>
+
+
+</div><!-- /page -->
+
+<div data-role="page" data-theme="c" id="questions">
+	<header data-role="header" data-position="fixed" data-theme="a">
+		<h1>Present!</h1>
+                <div data-role="navbar">
+		<ul>
+			<li><a href="#home">Home</a></li>
+			<li><a href="#" class="ui-btn-active">Questions</a></li>
+			<li><a href="#about">About</a></li>
+		</ul>
+	        </div><!-- /navbar -->
+	</header><!-- /header -->
+
+
+	<section data-role="content">	
+		<p>Page content goes here.</p>
+
+		<ul id="questionList" data-inset="true" data-role="listview" data-split-icon="check">
+                	<li data-icon="check"><a>Is there a God?<span class="ui-li-count">21</span></a></li>
+                        <li data-icon="check"><a>Please explain Murphy's Law.<span class="ui-li-count">5</span></a></li>
+                        <li data-icon="check"><a>Do we get a test about this?<span class="ui-li-count">1</span></a></li>
+                	<li><a>With data-plit-icon!<span class="ui-li-count">3</span></a><a href="#like" data-rel="popup" data-position-to="window" data-transition="pop">Purchase album</a></li>
+		</ul>		
+	</section><!-- /content -->
+
+</div><!-- /page -->
+
+
+<div data-role="page" data-theme="c" id="addpresentation">
+        <header data-role="header" data-position="fixed" data-theme="a">
+                <h1>Present!</h1>
+                <div data-role="navbar">
+                <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#questions">Questions</a></li>
+                        <li><a href="#" class="ui-btn-active">About</a></li>
+                </ul>
+                </div>
+        </header>
+
+        <section data-role="content">
+        Add presentation
+        <form action="/presentation/add" method="POST"> 
+
+        	<input type="text" placeholder="Title" name="title" />
+                <input type="hidden" name="lat" /><input type="hidden" name="lon" />
+                <button type="submit" name="submit" value="submit-value">Create presentation</button>
+        </form>
+        </section>
+</div><!-- /page -->
+
+	<!-- <script src="/javascripts/jquery.qrcode.min.js"></script> -->
+	<script src="/javascripts/jquery.qrcode.js"></script>
+	<script src="/javascripts/qrcode.js"></script>
+</body>
+</html>
+

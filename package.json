@@ -4,7 +4,7 @@
   "scripts": {
     "start": "app.js"
   },
-  "version": "0.0.1-4",
+  "version": "0.0.1-12",
   "dependencies": {
     "express": "2.5.x",
     "connect": "2.2.x",
@@ -15,7 +15,11 @@
     "passport": "0.1.x",
     "passport-google-oauth": "0.1.x",
     "passport-google": "0.2.x",
-    "manifesto": "0.0.x"
+    "manifesto": "0.0.x",
+    "node-uuid": "1.4.x",
+    "qrcode-npm": "0.0.x",
+    "hashids": "0.1.4",
+    "mongoose": "3.4.x"
   },
   "engines": {
     "node": "0.8.x"

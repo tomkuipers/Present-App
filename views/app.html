@@ -1,19 +1,19 @@
 <!DOCTYPE html> 
-<html>
 <!-- <html manifest="manifest.appcache"> --> 
+<html>
 <head>
         <meta charset="utf-8"/> 
 	<title>Present!</title> 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" />
-        <link rel="stylesheet" href="http://jquerymobile.com/demos/1.2.0/docs/_assets/css/jqm-docs.css" />
         <link rel="stylesheet" href="/stylesheets/custom.css" />
 	<script src="/javascripts/modernizr-2.6.1.min.js"></script>
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	<script src="/javascripts/custom.js"></script>
         <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
-        <script src="http://jquerymobile.com/demos/1.2.0/docs/_assets/js/jqm-docs.js"></script>
 	<script src="/javascripts/hide-address-bar.js"></script>
+	<script src="/javascripts/jquery.qrcode.js"></script>
+	<script src="/javascripts/qrcode.js"></script>
         <script src="/nowjs/now.js"></script>
 	<script>
 
@@ -28,13 +28,122 @@
 			$("#messageText").val("");
 		});
 
-		now.name = prompt("What's your name?", "");
+		//now.name = prompt("What's your name?", "");
+		now.name = "Anonymous";
+		/*	
+		$("#qrcode").qrcode({text: "http://"});
+		$("body").on("click", "#addPresentationBtn", function() {
+                        console.log("add btn preentation cliked");
+ 			// do you code
+			//$(this).text('Clicked');
+			// if you want to add text/html to #myControl then try
+			$("#qrcode", "#pAddPresentation").text('Clicked');
+		});
+		*/
+		// create presentation
+		/*
+		$("#addPresentationBtn").click(function() {
+			var title, lat, lon, timeoutVal = 10*1000*1000;
+			title = $("#pTitle").val();
+			navigator.geolocation.getCurrentPosition(function(pos) {
+				lat = pos.coords.latitude;
+				lon = pos.coords.longitude;
+			}, function() {
+				lat, lon  = 0;
+			}, { enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0});
+			
+			$.post("/api/presentations", {
+				"title": title,
+				"lat": lat,
+				"lon": lon
+			}, function(data) {
+				console.log("RESP: " + data.url);
+				var gotoBtn = '<a href="//' + data.url + '" data-ajax="false" data-role="button" data-theme="a">Start presentation</a>';
+				$("#pAddPresentation div.message").html(gotoBtn + "" + data.url + " " + data.title).trigger("create");
+				$("#qrcode").qrcode({text: "http://" + data.url});
+				$("#pAddPresentation p").toggle();
+				
+			});
+
+		});
+		*/
+
+		// list presentations
+
+		// add vote
+ 		/*
+                $("").live("click", function() {
+
+
+		});
+		*/
 
 	});
 
 	</script>
 </head> 
 <body> 
+
+<div data-role="page" data-theme="c" id="pAddPresentation">
+	<script>
+
+	 $(document).bind('pageinit', function() {
+
+		var lat, lon, timeoutVal = 10*1000*1000;
+		navigator.geolocation.getCurrentPosition(function(pos) {
+                                lat = pos.coords.latitude;
+                                lon = pos.coords.longitude;
+                        }, function() {
+                                lat, lon  = 0;
+                        }, { enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0});
+
+	$("#addPresentationBtn").click(function() {
+                        var title = $("#pTitle").val();
+                        $.post("/api/presentations", {
+                                "title": title,
+                                "lat": lat,
+                                "lon": lon
+                        }, function(data) {
+                                console.log(data);
+				$("#qrcode").before("<p>Presentation <strong>" + data.title + "</strong> created.</p>").qrcode({text: "http://" + data.url});
+                                var gotoBtn = '<a href="//' + data.url + '" data-ajax="false" data-role="button" data-theme="a" id="launchBtn" >Start presentation</a>';
+				$("#pAddPresentation div.message").append("<a href='" + data.url + "' data-ajax='false'>" + data.url +  "</a><br/>" + gotoBtn).trigger("create");
+				//$("#pAddPresentation div.message").html("<a href='" + data.url + "'>" + data.url +  "</a><br/>" + gotoBtn + "" + data.url + " " + data.title).trigger("create");	
+                                //$("#launchBtn").trigger("create");
+                                //$("#qrcode").qrcode({text: "http://" + data.url});
+                                $("#pAddPresentation div.inputfields").toggle();
+
+                        });
+
+                });	
+});
+	</script>
+
+	<header data-role="header" data-position="fixed" data-theme="a">
+		<h1>Present!</h1>
+	</header>
+	<section data-role="content">
+		<div data-role="fieldcontain" class="containing-element">
+		<div class="inputfields">		
+                <input type="text" id="pTitle" placeholder="Enter presentation title" />
+                <button id="addPresentationBtn">Add</button>
+        	</div>
+        	<div class="message center">
+		    <div id="qrcode"></div> 
+                </div>
+		</div>
+	</section>
+</div><!-- /page -->
+
+<div data-role="page" data-theme="c" id="pageListPresentations">
+        <header data-role="header" data-position="fixed" data-theme="a">
+                <h1>Present! - All presenations</h1>
+		<a href="#" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>
+        </header><!-- /header -->
+	<section data-role="content">
+		<ul data-role="listview" id="presentationsListView" data-filter="true" data-inset="true"></ul>
+	</section>
+</div><!-- /page -->
 
 <div data-role="page" data-theme="c" id="splash">
 	<section data-role="content">
@@ -79,10 +188,6 @@
 </p>	
 	</section><!-- /content -->
 
-	<footer data-role="footer" class="footer-docs" data-theme="c">
-		<p class="jqm-version"></p>
-		<p>&copy; 2012 jQuery Foundation and other contributors</p>
-	</footer><!-- /footer -->
 </div><!-- /page -->
 
 
@@ -110,11 +215,6 @@
 		</ul>		
 	</section><!-- /content -->
 
-        <footer data-role="footer" class="footer-docs" data-theme="c">
-		<p class="jqm-version"></p>
-		<p>&copy; 2012 jQuery Foundation and other contributors</p>
-	</footer>
-	<!-- /footer -->
 </div><!-- /page -->
 
 <div data-role="page" data-theme="c" id="about">
@@ -141,11 +241,6 @@
 	</div>
 
 	</section>
-	<footer data-role="footer" data-position="fixed" class="footer-docs" data-theme="c">
-                <p class="jqm-version"></p>
-                <p>&copy; 2012 jQuery Foundation and other contributors</p>
-	</footer>
-	<!-- /footer -->
 </div><!-- /page -->
 
 
@@ -170,13 +265,11 @@
                 <button type="submit" name="submit" value="submit-value">Create presentation</button>
         </form>
         </section>
-        <footer data-role="footer" data-position="fixed" class="footer-docs" data-theme="c">
-                <p class="jqm-version"></p>
-                <p>&copy; 2012 jQuery Foundation and other contributors</p>
-        </footer>
-        <!-- /footer -->
 </div><!-- /page -->
 
+	<!-- <script src="/javascripts/jquery.qrcode.min.js"></script> -->
+	<script src="/javascripts/jquery.qrcode.js"></script>
+	<script src="/javascripts/qrcode.js"></script>
 </body>
 </html>
 
