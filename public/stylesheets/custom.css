@@ -1,4 +1,8 @@
-
+/*
+body {background-color: #ecebe8;}
+div[role="navigation"] {border-bottom: .2em solid #86b410;}
+.my-btn-active {background-color: #86b410;}
+*/
 #splash .ui-slider-switch {width: 9em;}
 #qrcode {text-align: center;}
 .center {text-align: center; align-left: auto; align-right: auto;}
