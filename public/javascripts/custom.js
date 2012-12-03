@@ -65,11 +65,10 @@ $("#pageListQuestions").live("pagebeforeshow", function() {
 	});
 });
 
-$("#pageQuestion").live("pageinit", function() {
+$("#pageQuestion").live("pageinit", function() { // pagebeforecreate + html(tempList)
 	// populate previously asked questions
 	$.get("/api/presentation/" + presentationId, function(data) {
 		$.each(data.questions, function(index, value) {
-			console.log(index + " , " + value);
 			$('#messages').prepend('<li><a href="#pageListQuestions" id="' + value._id +'">' + value.name + '</a></li>');
 		});
 		$('#messages').listview("refresh");
@@ -98,13 +97,11 @@ $("#pageQuestion").live("pageinit", function() {
 	now.ready(function() {
 		// set room to current presentationId
 		now.changeRoom(presentationId);
-		//now.changeRoom("50b3bc6de934806be6000002");
         });
 
 });
 
 $("#pageListFavorites").live("pagebeforeshow", function(){ //pageinit + append(tempList)
-	console.log("#favoritesPage pageinit");
   // manipulate this page before its widgets are auto-initialized
 	$.get("/api/presentation/" + presentationId + "/favorites", function(data) {
 		var tempList = "";
@@ -115,4 +112,13 @@ $("#pageListFavorites").live("pagebeforeshow", function(){ //pageinit + append(t
 		$("#favorites").listview("refresh");
 	}); 
 });
+
+// calculate distance, spherical law of cosines, source: http://www.movable-type.co.uk/scripts/latlong.html
+var distance = function(lat1, lon1, lat2, lon2) {
+	var R = 6371; // km
+	var d = Math.acos(Math.sin(lat1)*Math.sin(lat2) + 
+		Math.cos(lat1)*Math.cos(lat2) *
+		Math.cos(lon2-lon1)) * R;
+	return d;
+};
 
