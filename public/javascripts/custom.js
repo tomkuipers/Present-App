@@ -22,6 +22,30 @@ $(document).bind("mobileinit", function(){
 
 var presentationId = presentationId || "";
 
+$("#pageAddPresentation").live("pageinit", function() {
+	var lat, lon, timeoutVal = 60000;
+	navigator.geolocation.getCurrentPosition(function(pos) {
+		lat = pos.coords.latitude;
+		lon = pos.coords.longitude;
+	}, function() {
+		lat, lon  = 0;
+	}, { enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0});
+
+	$("#addPresentationBtn").click(function() {
+		var title = $("#pTitle").val();
+		$.post("/api/presentations", {
+			"title": title,
+			"lat": lat,
+			"lon": lon
+		}, function(data) {
+			$("#qrcode").before("<p>Presentation <strong>" + data.title + "</strong> created.</p>").qrcode({text: "http://" + data.url});
+			var gotoBtn = '<a href="//' + data.url + '" data-ajax="false" data-role="button" data-theme="a" id="launchBtn" >Start presentation</a>';
+			$("#pageAddPresentation div.message").append("<a href='" + data.url + "' data-ajax='false'>" + data.url +  "</a><br/>" + gotoBtn).trigger("create");
+			$("#pageAddPresentation div.inputfields").toggle();
+		});
+	});
+});
+
 $("#pageListPresentations").live("pageinit", function() {
 	$.get("/api/presentations", function(data){ 
 		data.reverse();
