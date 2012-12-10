@@ -1,0 +1,17 @@
+CACHE MANIFEST
+#v%%version%%
+
+CACHE:
+/javascripts/modernizr-2.6.1.min.js
+/javascripts/jquery.mobile-1.2.0.min.js
+/javascripts/custom.js
+/javascripts/hide-address-bar.js
+/javascripts/jquery.qrcode.js
+/javascripts/qrcode.js
+
+/stylesheets/jquery.mobile-1.2.0.min.css
+/stylesheets/custom.css
+
+NETWORK:
+*
+
