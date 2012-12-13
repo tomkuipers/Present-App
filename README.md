@@ -5,7 +5,7 @@ The app allows attendees to ask questions (anonymously) about a presentation or 
 
 The 'Present!' mobile webapp is a submission for the [Apps On](http://www.surfnet.nl/nl/Thema/appson/Pages/Default.aspx) (in Dutch) contest.
 
-See it in action on http://present.nodejitsu.com.  
+See ~~it~~ the prototype in action on http://present.nodejitsu.com.  
 It's available as Open Source under the  MIT License.  
 
 Requirements
