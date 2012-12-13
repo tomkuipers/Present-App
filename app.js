@@ -6,6 +6,7 @@ var nowjs = require('now'),
     everyone = nowjs.initialize(server);
 var jqtpl = require('jqtpl');
 var manifesto = require('manifesto');
+var gzippo = require('gzippo');
 var uuid = require('node-uuid');
 var Hashids = require("hashids"),
     hashids = new Hashids("chocolade salty balls");
@@ -50,7 +51,8 @@ app.configure(function(){
     app.use(express.methodOverride());
     app.use(express.bodyParser());
     app.use(express.favicon(__dirname + '/public/images/favicon.ico'));
-    app.use(express.static(__dirname + '/public'));
+    //app.use(express.static(__dirname + '/public'));
+    app.use(gzippo.staticGzip(__dirname + '/public'));
     app.use(express.session({ secret: 'keyboard cat' }));
     // Initialize Passport! Also use passport.session() middleware, to support
     // persistent login sessions (recommended).
@@ -240,7 +242,7 @@ app.get('/index.html', function(req, res) {
 
 app.get("/manifest.appcache", function(req, res){
 
-  manifesto.fetch('./test-manifest.appcache', '.', function(err, data) {
+  manifesto.fetch('./public/test-manifest.appcache', '.', function(err, data) {
       if(err) {
         res.header("Content-Type", "text/plain");
         res.send(404, "Something mising!");
