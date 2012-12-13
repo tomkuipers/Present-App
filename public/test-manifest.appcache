@@ -4,13 +4,16 @@ CACHE MANIFEST
 CACHE:
 /javascripts/modernizr-2.6.1.min.js
 /javascripts/jquery.mobile-1.2.0.min.js
-/javascripts/custom.js
 /javascripts/hide-address-bar.js
 /javascripts/jquery.qrcode.js
 /javascripts/qrcode.js
 
 /stylesheets/jquery.mobile-1.2.0.min.css
-/stylesheets/custom.css
+/stylesheets/images/icons-18-black.png
+/stylesheets/images/icons-18-white.png
+/stylesheets/images/icons-36-black.png
+/stylesheets/images/icons-36-white.png
+
 
 NETWORK:
 *
